@@ -14,3 +14,13 @@ DashboardHerokuapp:
       Locator-Type: ID
       Locator-Value: flash
       Wait-For-Loaded: True
+  - text:
+      Name: user
+      Locator-Type: ID
+      Locator-Value: flash
+      Wait-For-Loaded: True
+  - link:
+      Name: user
+      Locator-Type: ID
+      Locator-Value: flash
+      Wait-For-Loaded: True
