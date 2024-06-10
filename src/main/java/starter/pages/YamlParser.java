@@ -9,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,34 +21,22 @@ public class YamlParser {
     private final String directoryPath;
 
     public YamlParser() {
-        // Leer la configuración de Serenity
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.createEnvironmentVariables();
         directoryPath = environmentVariables.getProperty("serenity.yaml.directory.path");
     }
 
-    public List<Map<String, String>> getSelectors(String filePath) {
+    public List<Map<String, String>> getSelectorsFromFile(String filePath) {
         List<Map<String, String>> selectors = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(filePath)) {
             Yaml yaml = new Yaml();
             Map<String, Object> data = yaml.load(fis);
 
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                List<Map<String, Map<String, String>>> elements = (List<Map<String, Map<String, String>>>) entry.getValue();
-                for (Map<String, Map<String, String>> elementMap : elements) {
-                    for (Map.Entry<String, Map<String, String>> elementEntry : elementMap.entrySet()) {
-                        selectors.add(elementEntry.getValue());
-                    }
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo no encontrado: " + filePath);
-            e.printStackTrace();
-        } catch (YAMLException e) {
-            System.out.println("Error al parsear el archivo YAML: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            data.values().forEach(value -> {
+                List<Map<String, Map<String, String>>> elements = (List<Map<String, Map<String, String>>>) value;
+                elements.forEach(elementMap -> elementMap.values().forEach(selectors::add));
+            });
+        } catch (IOException | YAMLException e) {
+            System.err.println("Error reading/parsing file: " + filePath + " - " + e.getMessage());
         }
         return selectors;
     }
@@ -60,10 +47,9 @@ public class YamlParser {
             Files.list(Paths.get(directoryPath))
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".yaml"))
-                    .forEach(path -> allSelectors.addAll(getSelectors(path.toString())));
+                    .forEach(path -> allSelectors.addAll(getSelectorsFromFile(path.toString())));
         } catch (IOException e) {
-            System.out.println("Error al leer los archivos del directorio: " + directoryPath);
-            e.printStackTrace();
+            System.err.println("Error reading files from directory: " + directoryPath + " - " + e.getMessage());
         }
         return allSelectors;
     }
@@ -73,17 +59,14 @@ public class YamlParser {
         String locatorValue = elementData.get("Locator-Value");
 
         if (locatorType == null || locatorValue == null) {
-            System.out.println("Error: 'Locator-Type' o 'Locator-Value' es nulo en los datos del elemento: " + elementData);
+            System.err.println("Error: 'Locator-Type' or 'Locator-Value' is null in element data: " + elementData);
             return null;
         }
 
-        By by = null;
+        By by;
         switch (locatorType.toUpperCase()) {
             case "ID":
                 by = By.id(locatorValue);
-                break;
-            case "NAME":
-                by = By.name(locatorValue);
                 break;
             case "XPATH":
                 by = By.xpath(locatorValue);
@@ -91,11 +74,29 @@ public class YamlParser {
             case "CSS":
                 by = By.cssSelector(locatorValue);
                 break;
-            // Añadir más tipos de localizadores si es necesario
+            case "NAME":
+                by = By.name(locatorValue);
+                break;
+            case "CLASS":
+                by = By.className(locatorValue);
+                break;
+            case "LINK":
+                by = By.linkText(locatorValue);
+                break;
+            case "PARTIAL_LINK":
+                by = By.partialLinkText(locatorValue);
+                break;
             default:
-                System.out.println("Error: Tipo de localizador no soportado: " + locatorType);
+                System.err.println("Error: Unsupported locator type: " + locatorType);
                 return null;
         }
         return driver.findElement(by);
+    }
+
+    public static void main(String[] args) {
+        YamlParser yamlParser = new YamlParser();
+        List<Map<String, String>> allSelectors = yamlParser.getAllSelectors();
+
+        allSelectors.forEach(System.out::println);
     }
 }
