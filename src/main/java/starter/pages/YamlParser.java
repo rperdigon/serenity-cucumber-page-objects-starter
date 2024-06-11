@@ -53,6 +53,18 @@ public class YamlParser {
         }
         return allSelectors;
     }
+    public List<Map<String, String>> getAllSelectorsFromPage() {
+        List<Map<String, String>> allSelectors = new ArrayList<>();
+        try {
+            Files.list(Paths.get(directoryPath))
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".yaml"))
+                    .forEach(path -> allSelectors.addAll(getSelectorsFromFile(path.toString())));
+        } catch (IOException e) {
+            System.err.println("Error reading files from directory: " + directoryPath + " - " + e.getMessage());
+        }
+        return allSelectors;
+    }
 
     public WebElement findElement(WebDriver driver, Map<String, String> elementData) {
         String locatorType = elementData.get("Locator-Type");
@@ -95,7 +107,7 @@ public class YamlParser {
 
     public static void main(String[] args) {
         YamlParser yamlParser = new YamlParser();
-        List<Map<String, String>> allSelectors = yamlParser.getAllSelectors();
+        List<Map<String, String>> allSelectors = yamlParser.getAllSelectorsFromPage();
 
         allSelectors.forEach(System.out::println);
     }
