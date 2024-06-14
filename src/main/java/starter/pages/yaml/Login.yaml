@@ -1,4 +1,4 @@
-LoginPage:
+Login:
   - button:
       Name: login
       Locator-Type: id

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static starter.tasks.TextUtils.formatText;
+
 public class YamlParser {
 
     private final String directoryPath;
@@ -53,12 +55,15 @@ public class YamlParser {
         }
         return allSelectors;
     }
-    public List<Map<String, String>> getAllSelectorsFromPage() {
+    public List<Map<String, String>> getAllSelectorsFromPage(String fileName) {
         List<Map<String, String>> allSelectors = new ArrayList<>();
         try {
             Files.list(Paths.get(directoryPath))
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().endsWith(".yaml"))
+                    .filter(path -> {
+                        String fileNameWithoutExtension = path.getFileName().toString().replaceAll("\\.[^.]*$", "");
+                        return fileNameWithoutExtension.equals(fileName);
+                    })
                     .forEach(path -> allSelectors.addAll(getSelectorsFromFile(path.toString())));
         } catch (IOException e) {
             System.err.println("Error reading files from directory: " + directoryPath + " - " + e.getMessage());
@@ -106,8 +111,10 @@ public class YamlParser {
     }
 
     public static void main(String[] args) {
+        String txt ="your car";
+        System.out.println(formatText(txt));
         YamlParser yamlParser = new YamlParser();
-        List<Map<String, String>> allSelectors = yamlParser.getAllSelectorsFromPage();
+        List<Map<String, String>> allSelectors = yamlParser.getAllSelectorsFromPage(formatText(txt));
 
         allSelectors.forEach(System.out::println);
     }
