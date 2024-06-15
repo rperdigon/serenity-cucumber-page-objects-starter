@@ -2,11 +2,11 @@ package starter.pages;
 
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class YamlParser {
+public class YamlParser_copy {
 
     private final String directoryPath;
 
-    public YamlParser() {
+    public YamlParser_copy() {
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.createEnvironmentVariables();
         directoryPath = environmentVariables.getProperty("serenity.yaml.directory.path");
     }
@@ -103,7 +103,7 @@ public class YamlParser {
     }
 
     public static void main(String[] args) {
-        YamlParser yamlParser = new YamlParser();
+        YamlParser_copy yamlParser = new YamlParser_copy();
         String page = "Login";
         String name = "login";
 

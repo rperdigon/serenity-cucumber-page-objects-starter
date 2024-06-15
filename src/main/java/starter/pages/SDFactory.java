@@ -23,10 +23,20 @@ public class SDFactory extends PageObject {
         put(CHECKOUT, PageFactory.initElements(getDriverStatic(), SaucedemoCheckOutPage.class));
     }};
 
+
     /**
      * The currently selected page.
      */
     public static AbstractPage currentPage;
+
+    /**
+     * Gets the current page that is selected.
+     *
+     * @return          The currently selected page.
+     */
+    public static AbstractPage getCurrentPage() {
+        return currentPage;
+    }
 
     /**
      * Sets the current page based on the provided page name.
