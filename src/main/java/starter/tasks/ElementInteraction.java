@@ -8,6 +8,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import starter.pages.SDFactory;
+import starter.pages.YamlParser;
 
 import java.util.List;
 

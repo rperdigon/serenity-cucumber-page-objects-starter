@@ -19,7 +19,7 @@ import static starter.pages.SDFactory.LOCATOR_MAP;
 
 public class YamlParser {
     private static final String SERENITY_YAML_DIRECTORY_PATH = "serenity.yaml.directory.path";
-    private final String directoryPath;
+    private static String directoryPath;
 
     public YamlParser() {
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.createEnvironmentVariables();
@@ -32,12 +32,12 @@ public class YamlParser {
         directoryPath = path;
     }
 
-    public By findSelector(String page, String name) {
+    public static By findSelector(String page, String name) {
         By selector = null;
         try {
             Optional<Path> pageFilePath = Files.list(Paths.get(directoryPath))
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().replaceAll("\\.[^.]*$", "").equals(page))
+                    .filter(path -> path.getFileName().toString().replaceAll("\\.[^.]*$", "").equalsIgnoreCase(page))
                     .findFirst();
 
             if (pageFilePath.isPresent()) {
@@ -48,7 +48,7 @@ public class YamlParser {
                         for (List<Map<String, Map<String, String>>> list : data.values()) {
                             for (Map<String, Map<String, String>> map : list) {
                                 for (Map<String, String> stringStringMap : map.values()) {
-                                    if (stringStringMap.get("Name").equals(name)) {
+                                    if (stringStringMap.get("Name").equalsIgnoreCase(name)) {
                                         selector = getByFromElementData(stringStringMap);
                                         System.out.println(stringStringMap);
                                         break;

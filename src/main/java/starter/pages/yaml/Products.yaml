@@ -1,21 +1,21 @@
-LoginPage:
+loginPage:
   - button:
-      Name: products
-      Locator-Type: css
-      Locator-Value: div.inventory_item
-      Wait-For-Loaded: true
+      name: products
+      locator-Type: css
+      locator-Value: div.inventory_item
+      wait-For-Loaded: true
   - text:
-      Name: title item
-      Locator-Type: css
-      Locator-Value: div.inventory_item
-      Wait-For-Loaded: true
+      name: title item
+      locator-Type: css
+      locator-Value: div.inventory_item
+      wait-For-Loaded: true
   - link:
-      Name: add to cart
-      Locator-Type: css
-      Locator-Value: button.btn
-      Wait-For-Loaded: true
+      name: add to cart
+      locator-Type: css
+      locator-Value: button.btn
+      wait-For-Loaded: true
   - link:
-      Name: cart icon
-      Locator-Type: css
-      Locator-Value: "#shopping_cart_container > a"
-      Wait-For-Loaded: true
+      name: cart icon
+      locator-Type: css
+      locator-Value: "#shopping_cart_container > a"
+      wait-For-Loaded: true
