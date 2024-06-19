@@ -33,7 +33,13 @@ public class YamlParser_copy {
             Yaml yaml = new Yaml();
             Map<String, List<Map<String, Map<String, String>>>> data = yaml.load(fis);
             if (data != null) {
-                data.values().forEach(list -> list.forEach(map -> map.values().forEach(selectors::add)));
+                data.values().forEach(
+                        list -> list.forEach(
+                                map -> map.values().forEach(
+                                        selectors::add
+                                )
+                        )
+                );
             }
         } catch (IOException | YAMLException e) {
             System.err.println("Error reading/parsing file: " + filePath + " - " + e.getMessage());
@@ -55,12 +61,25 @@ public class YamlParser_copy {
         return allSelectors;
     }
 
-    public Optional<Map<String, String>> findSelector(String page, String name) {
-        List<Map<String, String>> selectors = getAllSelectorsFromPage(page);
-        return selectors.stream()
-                .filter(selector -> name.equals(selector.get("Name")))
-                .findFirst();
+    public By findSelector(String page, String name) {
+        List<Map<String,String>> selector = getAllSelectorsFromPage(page);
+        return selector.stream()
+                .filter(selector1 -> name.equals(selector1.get("Name")))
+                .findFirst()
+                .map(this::getByFromElementData)
+                .orElse(null);
     }
+
+    //public Optional<Map<String, String>> findSelector(String page, String name) {
+        //List<Map<String, String>> selectors = getAllSelectorsFromPage(page);
+        //return selectors.stream()
+          //      .filter(selector -> name.equals(selector.get("Name")))
+            //    .findFirst();
+
+        //Optional<Map<String, String>> selector = findSelector(page, name);
+        //return selector.map(this::getByFromElementData).orElse(null);
+        //return null;
+    //}
 
     public By getByFromElementData(Map<String, String> elementData) {
         String locatorType = elementData.get("Locator-Type");
@@ -92,15 +111,17 @@ public class YamlParser_copy {
         }
     }
 
+    /*
     public By findBySelector(String page, String name) {
         Optional<Map<String, String>> selector = findSelector(page, name);
         return selector.map(this::getByFromElementData).orElse(null);
     }
+     */
 
-    public WebElement findElementByReferenceText(WebDriver driver, String page, String name) {
+    /*public WebElement findElementByReferenceText(WebDriver driver, String page, String name) {
         By by = findBySelector(page, name);
         return by != null ? driver.findElement(by) : null;
-    }
+    }*/
 
     public static void main(String[] args) {
         YamlParser_copy yamlParser = new YamlParser_copy();
@@ -110,7 +131,7 @@ public class YamlParser_copy {
         List<Map<String, String>> allSelectors = yamlParser.getAllSelectorsFromPage(page);
         allSelectors.forEach(System.out::println);
 
-        By selector = yamlParser.findBySelector(page, name);
+        By selector = yamlParser.findSelector(page, name);
         System.out.println(selector != null ? selector.toString() : "Selector not found.");
     }
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static starter.Constants.*;
 
@@ -75,25 +76,11 @@ public class SDFactory extends PageObject {
                 String selectorType = selectorParts[0].trim();
                 String selectorValue = selectorParts[1].trim();
 
-                switch (selectorType) {
-                    case "id":
-                        return By.id(selectorValue);
-                    case "css selector":
-                        return By.cssSelector(selectorValue);
-                    case "class name":
-                        return By.className(selectorValue);
-                    case "name":
-                        return By.name(selectorValue);
-                    case "link text":
-                        return By.linkText(selectorValue);
-                    case "partial link text":
-                        return By.partialLinkText(selectorValue);
-                    case "tag name":
-                        return By.tagName(selectorValue);
-                    case "xpath":
-                        return By.xpath(selectorValue);
-                    default:
-                        throw new IllegalArgumentException("Unsupported selector type: " + selectorType);
+                Function<String, By> byFunction = LOCATOR_MAP.get(selectorType);
+                if (byFunction != null) {
+                    return byFunction.apply(selectorValue);
+                }else {
+                    throw new IllegalArgumentException("Error: Unsupported locator type: " + selectorType);
                 }
             }
         }
@@ -101,4 +88,14 @@ public class SDFactory extends PageObject {
         // If the format is not recognized, throw an exception
         throw new IllegalArgumentException("Unrecognized format of WebElement.toString()");
     }
+    public static final Map<String, Function<String, By>> LOCATOR_MAP = new HashMap<String, Function<String, By>>(){{
+        put("id", By::id);
+        put("xpath", By::xpath);
+        put("css selector", By::cssSelector);
+        put("tag name", By::tagName);
+        put("name", By::name);
+        put("class", By::className);
+        put("link text", By::linkText);
+        put("partial link text", By::partialLinkText);
+    }};
 }
