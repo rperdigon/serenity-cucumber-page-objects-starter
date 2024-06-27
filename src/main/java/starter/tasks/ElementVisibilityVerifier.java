@@ -8,7 +8,7 @@ import static net.serenitybdd.screenplay.questions.Text.*;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isNotVisible;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.*;
 import static org.hamcrest.Matchers.equalTo;
-import static starter.pages.SDFactory.*;
+import static starter.pages.factory.PageFactory.*;
 
 public class ElementVisibilityVerifier {
     /**
@@ -22,7 +22,7 @@ public class ElementVisibilityVerifier {
                 "check that the element is visible: " + element,
                 GivenWhenThen.seeThat(
                         // Get the web element using the selector for the current page
-                        the(currentPage.getSelector(element)),
+                        the(getCurrentPage().getSelector(element)),
                         WebElementStateMatchers.isVisible()
                 ));
     }
@@ -39,7 +39,7 @@ public class ElementVisibilityVerifier {
                 "check that the element is not visible: " + element,
                 // Use WebElementQuestion to locate the element and WebElementStateMatchers to check its visibility
                 GivenWhenThen.seeThat(
-                        the(currentPage.getSelector(element)),
+                        the(getCurrentPage().getSelector(element)),
                         isNotVisible()
                 ));
     }
@@ -55,7 +55,7 @@ public class ElementVisibilityVerifier {
         OnStage.theActorInTheSpotlight().should(
                 "check that the element number is: " + number,
                 GivenWhenThen.seeThat(
-                        of(currentPage.getSelector(element)).asString(),
+                        of(getCurrentPage().getSelector(element)).asString(),
                         equalTo(number)
                 )
         );
@@ -71,7 +71,7 @@ public class ElementVisibilityVerifier {
         OnStage.theActorInTheSpotlight().should(
                 "check that the element name: " + element,
                 GivenWhenThen.seeThat(
-                        of(currentPage.getSelector(element)).asString(),
+                        of(getCurrentPage().getSelector(element)).asString(),
                         equalTo(element)
                 )
         );

@@ -1,26 +1,26 @@
 LoginPage:
   - button:
-      Name: your information
-      Locator-Type: css
-      Locator-Value: div.checkout_info
-      Wait-For-Loaded: true
+      name: your information
+      locator-type: css
+      locator-value: div.checkout_info
+      wait-for-loaded: true
   - button:
-      Name: first name
-      Locator-Type: id
-      Locator-Value: first-name
-      Wait-For-Loaded: true
+      name: first name
+      locator-type: id
+      locator-value: first-name
+      wait-for-loaded: true
   - button:
-      Name: last name
-      Locator-Type: id
-      Locator-Value: last-name
-      Wait-For-Loaded: true
+      name: last name
+      locator-type: id
+      locator-value: last-name
+      wait-for-loaded: true
   - button:
-      Name: zip/postal code
-      Locator-Type: id
-      Locator-Value: postal-code
-      Wait-For-Loaded: true
+      name: zip/postal code
+      locator-type: id
+      locator-value: postal-code
+      wait-for-loaded: true
   - button:
       Name: continue
-      Locator-Type: id
-      Locator-Value: continue
-      Wait-For-Loaded: true
+      locator-type: id
+      locator-value: continue
+      wait-for-loaded: true

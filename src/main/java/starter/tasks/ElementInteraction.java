@@ -7,8 +7,7 @@ import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
-import starter.pages.SDFactory;
-import starter.pages.YamlParser;
+import starter.pages.factory.PageFactory;
 
 import java.util.List;
 
@@ -28,12 +27,12 @@ public class ElementInteraction {
      *
      * @param repeatedText      The text to search for in the list items.
      * @param listElement       The list to iterate for results.
-     * @param elementWhithTitle The title text to match in the list items.
+     * @param elementWithTitle The title text to match in the list items.
      */
-    public static void clickOnElementInListWithTitleContaining(String repeatedText, String listElement, String elementWhithTitle) {
+    public static void clickOnElementInListWithTitleContaining(String repeatedText, String listElement, String elementWithTitle) {
         List<WebElementFacade> webElements = getWebElementsWithTitleContaining(listElement);
         for (WebElementFacade element : webElements) {
-            if (element.getText().contains(elementWhithTitle)) {
+            if (element.getText().contains(elementWithTitle)) {
                 clickOnTarget(repeatedText);
                 break;
             }
@@ -48,7 +47,7 @@ public class ElementInteraction {
      */
     public static List<WebElementFacade> getWebElementsWithTitleContaining(String repeatedText) {
         return Target.the("option with title field")
-                .located(SDFactory.currentPage.getSelector(repeatedText))
+                .located(PageFactory.getCurrentPage().getSelector(repeatedText))
                 .resolveAllFor(OnStage.theActorInTheSpotlight()); //resolveAllFor uses implicit wait
     }
 
@@ -109,6 +108,6 @@ public class ElementInteraction {
      * @return The ClickInteraction object.
      */
     private static ClickInteraction createClickOnStringAction(String selector) {
-        return Click.on(SDFactory.currentPage.getSelector(selector));
+        return Click.on(PageFactory.getCurrentPage().getSelector(selector));
     }
 }

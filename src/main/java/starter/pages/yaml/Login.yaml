@@ -1,16 +1,16 @@
 login:
   - button:
       name: login
-      locator-Type: id
-      locator-Value: login-button
-      wait-For-Loaded: true
+      locator-type: id
+      locator-value: login-button
+      wait-for-loaded: true
   - text:
       name: user
-      locator-Type: id
-      locator-Value: user-name
-      wait-For-Loaded: true
+      locator-type: id
+      locator-value: user-name
+      wait-for-loaded: true
   - link:
       name: pass
-      locator-Type: id
-      locator-Value: password
-      wait-For-Loaded: true
+      locator-type: id
+      locator-value: password
+      wait-for-loaded: true

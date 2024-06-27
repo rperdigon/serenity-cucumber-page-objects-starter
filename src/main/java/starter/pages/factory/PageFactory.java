@@ -1,46 +1,62 @@
-package starter.pages;
+package starter.pages.factory;
 
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
+import starter.pages.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.openqa.selenium.support.PageFactory.initElements;
 import static starter.Constants.*;
 
-public class SDFactory extends PageObject {
+public class PageFactory extends PageObject {
 
     /**
      * Map associating page names with their corresponding instances.
      */
-    public static Map<String, AbstractPage> map = new HashMap<String, AbstractPage>() {{
-        put(LOGIN, PageFactory.initElements(getDriverStatic(), SaucedemoLoginPage.class));
-        put(PRODUCTS, PageFactory.initElements(getDriverStatic(), SaucedemoProductsPage.class));
-        put(YOURCART, PageFactory.initElements(getDriverStatic(), SaucedemoYourCartPage.class));
-        put(YOURINFORMATION, PageFactory.initElements(getDriverStatic(), SaucedemoYourInformationPage.class));
-        put(CHECKOUT, PageFactory.initElements(getDriverStatic(), SaucedemoCheckOutPage.class));
+    private static final Map<String, AbstractPage> map = new HashMap<String, AbstractPage>() {{
+        put(LOGIN, initElements(getDriverStatic(), SaucedemoLoginPage.class));
+        put(PRODUCTS, initElements(getDriverStatic(), SaucedemoProductsPage.class));
+        put(YOURCART, initElements(getDriverStatic(), SaucedemoYourCartPage.class));
+        put(YOURINFORMATION, initElements(getDriverStatic(), SaucedemoYourInformationPage.class));
+        put(CHECKOUT, initElements(getDriverStatic(), SaucedemoCheckOutPage.class));
     }};
-
 
     /**
      * The currently selected page.
      */
-    public static AbstractPage currentPage;
+    private static AbstractPage currentPage;
 
     /**
      * Gets the current page that is selected.
      *
-     * @return          The currently selected page.
+     * @return The currently selected page.
      */
     public static AbstractPage getCurrentPage() {
         return currentPage;
     }
 
     /**
+     * Gets the name of the current page that is selected.
+     *
+     * @return The name of the currently selected page.
+     */
+    public static String getCurrentPageName() {
+        for (Map.Entry<String, AbstractPage> entry : map.entrySet()) {
+            if (entry.getValue().equals(currentPage)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
      * Sets the current page based on the provided page name.
+     *
      * @param page Name of the page to set as the current page.
      */
     public static void setCurrentPage(String page) {
@@ -49,14 +65,16 @@ public class SDFactory extends PageObject {
 
     /**
      * Gets a static instance of the WebDriver.
+     *
      * @return Static instance of WebDriver.
      */
     public static WebDriver getDriverStatic() {
-        return new SDFactory().getDriver();
+        return new PageFactory().getDriver();
     }
 
     /**
      * Gets a By object from a WebElement using the information from its toString().
+     *
      * @param element WebElement from which to obtain the By selector.
      * @return By object corresponding to the WebElement's selector.
      * @throws IllegalArgumentException If the toString() format is not recognized.
@@ -79,8 +97,8 @@ public class SDFactory extends PageObject {
                 Function<String, By> byFunction = LOCATOR_MAP.get(selectorType);
                 if (byFunction != null) {
                     return byFunction.apply(selectorValue);
-                }else {
-                    throw new IllegalArgumentException("Error: Unsupported locator type: " + selectorType);
+                } else {
+                    throw new IllegalArgumentException("Unsupported locator type: " + selectorType);
                 }
             }
         }
@@ -88,13 +106,14 @@ public class SDFactory extends PageObject {
         // If the format is not recognized, throw an exception
         throw new IllegalArgumentException("Unrecognized format of WebElement.toString()");
     }
-    public static final Map<String, Function<String, By>> LOCATOR_MAP = new HashMap<String, Function<String, By>>(){{
+
+    public static final Map<String, Function<String, By>> LOCATOR_MAP = new HashMap<String, Function<String, By>>() {{
         put("id", By::id);
         put("xpath", By::xpath);
         put("css selector", By::cssSelector);
         put("tag name", By::tagName);
         put("name", By::name);
-        put("class", By::className);
+        put("class name", By::className);
         put("link text", By::linkText);
         put("partial link text", By::partialLinkText);
     }};

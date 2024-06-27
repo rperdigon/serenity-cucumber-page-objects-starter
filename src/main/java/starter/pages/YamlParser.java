@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static starter.pages.SDFactory.LOCATOR_MAP;
+import static starter.pages.factory.PageFactory.LOCATOR_MAP;
 
 public class YamlParser {
     private static final String SERENITY_YAML_DIRECTORY_PATH = "serenity.yaml.directory.path";

@@ -1,11 +1,11 @@
 LoginPage:
   - button:
-      Name: your cart
-      Locator-Type: id
-      Locator-Value: cart_contents_container
-      Wait-For-Loaded: true
+      name: your cart
+      locator-type: id
+      locator-value: cart_contents_container
+      wait-for-loaded: true
   - button:
-      Name: checkout
-      Locator-Type: id
-      Locator-Value: checkout
-      Wait-For-Loaded: true
+      name: checkout
+      locator-type: id
+      locator-value: checkout
+      wait-for-loaded: true
